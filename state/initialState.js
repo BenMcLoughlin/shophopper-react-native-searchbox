@@ -20,7 +20,10 @@ export const initialState = {
         shops: [],
         gender: []
     },
-    filtersV2: [],
+    priceRange: {
+        bottom: 0,
+        top: 100000
+    },
     user: {
         id: null,
         name: '',

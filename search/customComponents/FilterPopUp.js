@@ -9,6 +9,7 @@ import { Button } from '../../components/buttons/Button';
 import { SearchContext } from '@appbaseio/react-native-searchbox';
 import { colors } from '../../themes/colors';
 import { FILTER_IDS } from '../../state/globalVariables';
+import { PriceFilter } from './PriceFilter';
 
 export const FilterPopUp = ({ bottomSheetRef }) => {
     const searchBase = useContext(SearchContext);
@@ -48,7 +49,9 @@ export const FilterPopUp = ({ bottomSheetRef }) => {
                     <Panel title="Gender">
                         <FiltersSelect id={'gender'} dataField="gender.keyword" />
                     </Panel>
-                    <Panel title="Price Range"></Panel>
+                    <Panel title="Price Range">
+                        <PriceFilter id={'price'} dataField="price.keyword" />
+                    </Panel>
                 </Accordion>
                 <Buttons>
                     <Hr />

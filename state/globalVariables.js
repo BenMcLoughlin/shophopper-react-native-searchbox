@@ -30,7 +30,7 @@ export const BUCKETS = ['casual', 'bohemian', 'activeWear', 'vintage', 'business
 
 export const GENDER = ['women', 'mens', 'unisex', 'children'];
 
-export const FILTER_IDS = ['buckets', 'merchant', 'sizes', 'gender'];
+export const FILTER_IDS = ['buckets', 'merchant', 'sizes', 'gender', 'price'];
 
 export const BRANDS = [
     'Addition Elle',

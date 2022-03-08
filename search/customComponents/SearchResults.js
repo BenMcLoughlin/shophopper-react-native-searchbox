@@ -23,7 +23,9 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
             size={10}
             react={{
                 and: ['search-component', 'popular', ...FILTER_IDS]
-            }}>
+            }}
+            preserveResults={true}
+            subscribeToStateChanges={() => console.log('Hello from SearchResults')}>
             {({ results, loading, size, from, setValue, setFrom, setSortBy, sortBy }) => {
                 return (
                     <WithLoadingSpinner loading={loading && (!from || from === 0)}>
