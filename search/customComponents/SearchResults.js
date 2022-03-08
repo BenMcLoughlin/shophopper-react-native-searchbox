@@ -62,13 +62,7 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
                                         }
                                     }}
                                     renderItem={({ item }) => {
-                                        return (
-                                            <Tile
-                                                onPress={() => navigation.navigate('Product', { product: item })}
-                                                key={item.id}
-                                                product={item}
-                                            />
-                                        );
+                                        return <Tile onPress={() => null} key={item.id} product={item} />;
                                     }}
                                     keyExtractor={(item, index) => item._id + index}
                                 />

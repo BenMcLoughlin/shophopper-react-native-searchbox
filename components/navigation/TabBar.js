@@ -43,7 +43,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
                     });
 
                     if (!isFocused && !event.defaultPrevented) {
-                        navigation.navigate(route.name);
+                       null
                     }
                 };
 

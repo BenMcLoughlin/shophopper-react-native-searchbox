@@ -48,5 +48,5 @@ const Label = styled.Text`
     color: white;
     font-weight: bold;
     font-size: ${(p) => scale(Math.min(Math.max(p.size * 1.4, 10), 20))}px;
-    font-family: 'Lato';
+
 `;

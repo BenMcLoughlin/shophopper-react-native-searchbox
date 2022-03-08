@@ -4,22 +4,22 @@ import styled from 'styled-components/native';
 import { NavBar, IconButton } from '../components';
 import { SearchBar, PopularSearches, SearchResults, FilterPopUp } from './customComponents';
 
-export const Search = ({ navigation }) => {
+export const Search = () => {
     const bottomSheetRef = useRef(null);
 
     return (
         <Container>
             <SearchBase
                 index="products-dev"
-                url="ASK_BEN_AT_dev@shophopper.ca"
-                credentials={"ASK_BEN_AT_dev@shophopper.ca"}
+                url="https://shophopper-xaazcfr-arc.searchbase.io"
+                credentials={'df889fd7bdcd:852d98f2-d95a-4333-9775-31631a48397b'}
                 appbaseConfig={{
                     recordAnalytics: true,
                     enableQueryRules: true,
                     useCache: false
                 }}>
                 <NavBar
-                    left={() => <IconButton icon="chevron-left" onPress={() => navigation.goBack()} />}
+                    left={() => <IconButton icon="chevron-left" onPress={() => null} />}
                     center={() => <SearchBar />}
                     right={() => (
                         <ClickToOpenFilters onPress={() => bottomSheetRef.current.open()}>
@@ -28,9 +28,8 @@ export const Search = ({ navigation }) => {
                         </ClickToOpenFilters>
                     )}
                 />
-            
                 <PopularSearches />
-                <SearchResults navigation={navigation} bottomSheetRef={bottomSheetRef} />
+                <SearchResults  bottomSheetRef={bottomSheetRef} />
                 <FilterPopUp bottomSheetRef={bottomSheetRef} />
             </SearchBase>
         </Container>
