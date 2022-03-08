@@ -39,6 +39,7 @@ export const SearchBar = () => {
                     weight: 1
                 }
             ]}
+            sortOptions={['price', 'original_price', 'desc']}
             value={state.search.text}
             onChange={(value) => setState({ search: { text: value } })}
             renderNoSuggestion={() => <Text>No suggestions found</Text>}

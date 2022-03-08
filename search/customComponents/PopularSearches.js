@@ -50,6 +50,7 @@ export const PopularSearches = ({ onPress }) => {
                                     onPress={() => {
                                         setValue(option, {
                                             triggerDefaultQuery: true,
+                                            triggerCustomQuery: true,
                                             stateChanges: true
                                         });
                                     }}>

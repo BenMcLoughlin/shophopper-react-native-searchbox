@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { SearchBase } from '@appbaseio/react-native-searchbox';
 import styled from 'styled-components/native';
 import { NavBar, IconButton } from '../components';
-import { SearchBar, PopularSearches, SearchResults, FilterPopUp } from './customComponents';
+import { SearchBar, PopularSearches, SearchResults, FilterPopUp, SortResults } from './customComponents';
 
 export const Search = () => {
     const bottomSheetRef = useRef(null);
@@ -29,7 +29,8 @@ export const Search = () => {
                     )}
                 />
                 <PopularSearches />
-                <SearchResults  bottomSheetRef={bottomSheetRef} />
+                <SortResults listStyle={'grid'} setListStyle={() => 'setListStyle'} />
+                <SearchResults bottomSheetRef={bottomSheetRef} />
                 <FilterPopUp bottomSheetRef={bottomSheetRef} />
             </SearchBase>
         </Container>

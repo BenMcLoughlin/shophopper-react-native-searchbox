@@ -7,7 +7,7 @@ import { WithLoadingSpinner } from '../../components/wrappers/WithLoadingSpinner
 import { GridTile, ListTile } from '../../components/tiles';
 import { ActivityIndicator } from 'react-native-paper';
 import { FlatList } from 'react-native';
-import { SortControls } from '../../components/formInputs/SortControls';
+import { SortResults } from './SortResults';
 import { SelectedFilters } from './SelectedFilters';
 import { FILTER_IDS } from '../../state/globalVariables';
 
@@ -22,11 +22,12 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
             dataField="title"
             size={10}
             react={{
-                and: ['search-component', 'popular', ...FILTER_IDS]
+                and: ['search-component', 'popular', 'sortControls', ...FILTER_IDS]
             }}
             preserveResults={true}
             subscribeToStateChanges={() => console.log('Hello from SearchResults')}>
             {({ results, loading, size, from, setValue, setFrom, setSortBy, sortBy }) => {
+                console.log('/SearchResults.js - results.data: ', results.data);
                 return (
                     <WithLoadingSpinner loading={loading && (!from || from === 0)}>
                         <Container variant={listStyle}>
@@ -40,7 +41,7 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
                                     numColumns={listStyle === 'grid' ? 2 : 1}
                                     ListHeaderComponent={
                                         <Header>
-                                            <SortControls listStyle={listStyle} setListStyle={setListStyle} />
+                                            {/* <SortResults listStyle={listStyle} setListStyle={setListStyle} /> */}
                                             <NumberOfResults>
                                                 {results.numberOfResults.toLocaleString()} results found in {results.time}ms
                                             </NumberOfResults>

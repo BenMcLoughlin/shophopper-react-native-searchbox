@@ -31,6 +31,7 @@ export const PriceFilter = ({ id, dynamic = true, aggregationSize }) => {
                     : undefined
             }
             triggerQueryOnInit={!searchBase.getComponent(id)}
+    
             destroyOnUnmount={false}
             render={({ value, setValue }) => {
                 return (
