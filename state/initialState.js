@@ -24,6 +24,10 @@ export const initialState = {
         bottom: 0,
         top: 100000
     },
+    sortOptions: {
+        dataField: "original_price",
+        sortBy: 'desc'
+    },
     user: {
         id: null,
         name: '',

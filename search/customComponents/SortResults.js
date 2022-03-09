@@ -1,6 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView } from 'react-native';
-import { GradientBlock } from '../../components';
 import { SearchComponent, SearchContext } from '@appbaseio/react-native-searchbox';
 import { colors } from '../../themes/colors';
 import { startCase, scale } from '../../utils';
@@ -8,27 +6,38 @@ import styled from 'styled-components/native';
 import { StateContext } from '../../state/StateContext';
 import { FILTER_IDS } from '../../state/globalVariables';
 import { verticalScale } from 'react-native-size-matters';
+import { IconButton } from '../../components/buttons/IconButton';
 
 export const SortResults = ({ listStyle, setListStyle }) => {
     const searchBase = useContext(SearchContext);
     const { state, setState } = useContext(StateContext);
 
-    const [sortBy, setSortBy] = useState('relevance');
+    const searchResultsInstance = searchBase.getComponent('search-component');
+
+    const [selected, setSelected] = useState('relevance');
 
     const otherIcon = listStyle === 'grid' ? 'list' : 'grid';
 
     const options = ['relevance', 'latest', 'discount', 'price'];
 
+    const options2 = [
+        { label: 'relevance', dataField: '_score', sortBy: 'desc' },
+        { label: 'latest', dataField: 'date', sortBy: 'desc' },
+        { label: 'discount', dataField: 'discount', sortBy: 'desc' },
+        { label: 'price', dataField: 'original_price', sortBy: 'asc' }
+    ];
+
     return (
         <SearchComponent
             interval={1000}
-            id="sortControls"
+            id="SortResults"
             type="search"
             value={null}
             customQuery={(searchComponent) => {
                 if (!searchComponent.value) {
                     return {};
                 }
+
                 return {
                     sort: {
                         original_price: 'desc'
@@ -37,27 +46,74 @@ export const SortResults = ({ listStyle, setListStyle }) => {
             }}
             subscribeTo={['aggregationData', 'requestStatus', 'value', 'results']}
             URLParams
-            aggregations={['min', 'max', 'histogram']}
             react={{
-                and: ['search-component', 'result-component', ...FILTER_IDS.filter((d) => d !== 'sortControls')]
+                and: ['search-component', 'results-component', ...FILTER_IDS]
             }}
             // triggerQueryOnInit={!searchBase.getComponent(id)}
             destroyOnUnmount={false}
             render={({ setValue }) => {
                 return (
                     <Wrapper>
-                        {options.map((option) => {
-                            const isSelected = sortBy === option;
+                        {options2.map(({ label, dataField, sortBy }) => {
+                            const isSelected = selected === label;
                             return (
                                 <Clickable
-                                    key={option}
-                                    onPress={() => setValue('original_price', { triggerCustomQuery: true, stateChanges: true })}>
-                                    <Text isSelected={isSelected}>{startCase(option)}</Text>
+                                    key={label}
+                                    onPress={() => {
+                                        /*-----------------------------------------------------------------------------------------------------------------
+                                         Attempt 1 - set the state hardcoded to sort by _id
+                                         - problem - doesnt reset state
+
+                                         setState({ sortOptions: { dataField: newValue } });
+                                             
+                                         */
+
+                                        let newValue = state.sortOptions.dataField === 'original_price' ? 'id' : 'original_price';
+
+                                        /*-----------------------------------------------------------------------------------------------------------------
+                                         Attempt 2 - set the data field directly on searchResult component and trigger custom query
+                            
+
+                                      searchResultsInstance?.setDataField('id', {
+                                            triggerCustomQuery: true // to trigger the results query
+                                        });
+
+
+                                         */
+
+                                        /* -----------------------------------------------------------------------------------------------------------------
+                                        Attempt 3 - set state, then trigger custom query
+                                         - problem - doesnt work...
+
+                                            setState({ sortOptions: { dataField: 'id' } });
+                                            searchResultsInstance.triggerCustomQuery()
+                                      
+
+                                        setState({ sortOptions: { dataField: 'id' } });
+                                        searchResultsInstance?.triggerCustomQuery();
+   */
+                                        setState({ sortOptions: { dataField: newValue } });
+                                        
+                                        searchResultsInstance?.setValue('hat', {
+                                            triggerCustomQuery: true // to trigger the results query
+                                        });
+                                        // console.log(searchResultsInstance);
+
+                                        setSelected(label);
+                                    }}>
+                                    <Text isSelected={isSelected}>{startCase(label)}</Text>
                                     <Divider />
                                     {isSelected && <HighlightBorder />}
                                 </Clickable>
                             );
                         })}
+                        <IconWrapper>
+                            <IconButton
+                                icon={`view-${otherIcon}-outline`}
+                                color={colors.grey.dark}
+                                onPress={() => setListStyle(listStyle === 'grid' ? 'list' : 'grid')}
+                            />
+                        </IconWrapper>
                     </Wrapper>
                 );
             }}

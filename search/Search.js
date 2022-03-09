@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { SearchBase } from '@appbaseio/react-native-searchbox';
 import styled from 'styled-components/native';
 import { NavBar, IconButton } from '../components';
@@ -6,7 +6,7 @@ import { SearchBar, PopularSearches, SearchResults, FilterPopUp, SortResults } f
 
 export const Search = () => {
     const bottomSheetRef = useRef(null);
-
+    const [listStyle, setListStyle] = useState('grid');
     return (
         <Container>
             <SearchBase
@@ -29,8 +29,8 @@ export const Search = () => {
                     )}
                 />
                 <PopularSearches />
-                <SortResults listStyle={'grid'} setListStyle={() => 'setListStyle'} />
-                <SearchResults bottomSheetRef={bottomSheetRef} />
+                <SortResults />
+                <SearchResults bottomSheetRef={bottomSheetRef} listStyle={listStyle} setListStyle={setListStyle} />
                 <FilterPopUp bottomSheetRef={bottomSheetRef} />
             </SearchBase>
         </Container>

@@ -1,36 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components/native';
 import { scale } from '../../utils';
 import { colors } from '../../themes/colors';
-import { SearchComponent } from '@appbaseio/react-native-searchbox';
+import { SearchComponent, SearchContext } from '@appbaseio/react-native-searchbox';
 import { WithLoadingSpinner } from '../../components/wrappers/WithLoadingSpinner';
 import { GridTile, ListTile } from '../../components/tiles';
 import { ActivityIndicator } from 'react-native-paper';
 import { FlatList } from 'react-native';
-import { SortResults } from './SortResults';
+import { SortControls } from '../../components/formInputs/SortControls';
 import { SelectedFilters } from './SelectedFilters';
 import { FILTER_IDS } from '../../state/globalVariables';
+import { StateContext } from '../../state/StateContext';
 
-export const SearchResults = ({ navigation, bottomSheetRef }) => {
-    const [listStyle, setListStyle] = useState('grid');
-
+export const SearchResults = ({ navigation, bottomSheetRef, listStyle }) => {
     const Tile = listStyle === 'grid' ? GridTile : ListTile;
+
+    const { state, setState } = useContext(StateContext);
+    const searchBase = useContext(SearchContext);
+    const { sortOptions } = state;
+
+    console.log('dataField', sortOptions.dataField);
+    console.log('options', state.sortOptions);
 
     return (
         <SearchComponent
-            id="result-component"
-            dataField="title"
+            id="results-component"
+            dataField={sortOptions.dataField}
+            sortBy={sortOptions.sortBy}
             size={10}
             react={{
-                and: ['search-component', 'popular', 'sortControls', ...FILTER_IDS]
+                and: ['search-component', 'popular', ...FILTER_IDS]
             }}
-            preserveResults={true}
-            subscribeToStateChanges={() => console.log('Hello from SearchResults')}>
-            {({ results, loading, size, from, setValue, setFrom, setSortBy, sortBy }) => {
-                console.log('/SearchResults.js - results.data: ', results.data);
+            preserveResults={true}>
+            {({ results, loading, size, from, setValue, setFrom, setSortBy, triggerCustomQuery, setDataField }) => {
                 return (
                     <WithLoadingSpinner loading={loading && (!from || from === 0)}>
                         <Container variant={listStyle}>
+                            <Title>{results.numberOfResults.toLocaleString()}</Title>
                             {results.data ? (
                                 <FlatList
                                     extraData={false}
@@ -41,7 +47,6 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
                                     numColumns={listStyle === 'grid' ? 2 : 1}
                                     ListHeaderComponent={
                                         <Header>
-                                            {/* <SortResults listStyle={listStyle} setListStyle={setListStyle} /> */}
                                             <NumberOfResults>
                                                 {results.numberOfResults.toLocaleString()} results found in {results.time}ms
                                             </NumberOfResults>
@@ -65,7 +70,13 @@ export const SearchResults = ({ navigation, bottomSheetRef }) => {
                                         }
                                     }}
                                     renderItem={({ item }) => {
-                                        return <Tile onPress={() => null} key={item.id} product={item} />;
+                                        return (
+                                            <Tile
+                                                onPress={() => navigation.navigate('Product', { product: item })}
+                                                key={item.id}
+                                                product={item}
+                                            />
+                                        );
                                     }}
                                     keyExtractor={(item, index) => item._id + index}
                                 />
@@ -120,6 +131,11 @@ const Text = styled.Text`
 `;
 const NumberOfResults = styled.Text`
     margin: 20px auto;
+`;
+const DummyButton = styled.TouchableOpacity`
+    height: 50px;
+    width: 200px;
+    background: red;
 `;
 
 const Loading = styled(ActivityIndicator)``;

@@ -13,33 +13,21 @@ const items = ['casual', 'OKGN', 'crewneck', 'formal wear', 'shorts'];
 export const PopularSearches = ({ onPress }) => {
     const searchBase = useContext(SearchContext);
     const { state, setState } = useContext(StateContext);
+    const searchBoxInstance = searchBase.getComponent('search-component');
 
     return (
         <SearchComponent
             interval={1000}
             id="popular"
             type="search"
-            dataField={[
-                {
-                    field: 'title',
-                    weight: 3
-                },
-                {
-                    field: 'business_name',
-                    weight: 1
-                }
-            ]}
-            value=""
             subscribeTo={['aggregationData', 'requestStatus', 'value', 'results']}
             URLParams
-            aggregations={['min', 'max', 'histogram']}
             react={{
-                and: ['search-component', 'result-component', ...FILTER_IDS.filter((d) => d !== 'popular')]
+                and: ['search-component', 'result-component', ...FILTER_IDS]
             }}
             // triggerQueryOnInit={!searchBase.getComponent(id)}
             destroyOnUnmount={false}
-            render={({ value, setValue }) => {
-                console.log('/PopularSearches.js - value: ', value);
+            render={() => {
                 return (
                     <Gradient>
                         <Title>Popular:</Title>
@@ -48,10 +36,8 @@ export const PopularSearches = ({ onPress }) => {
                                 <Clickable
                                     key={option}
                                     onPress={() => {
-                                        setValue(option, {
-                                            triggerDefaultQuery: true,
-                                            triggerCustomQuery: true,
-                                            stateChanges: true
+                                        searchBoxInstance.setValue(option, {
+                                            triggerCustomQuery: true // to trigger the results query
                                         });
                                     }}>
                                     <Label>{option}</Label>
